@@ -1,59 +1,86 @@
-# WeatherGo - Weather Agent Chat Interface
+# WeatherGo 🌦️
 
-A modern, responsive, and aesthetic chat interface for the Provue AI Weather Agent, built with Next.js 15 and Tailwind CSS.
+**WeatherGo** is a state-of-the-art, AI-powered weather assistant designed to revolutionize how users interact with weather data. Built with the latest web technologies, it replaces traditional dashboard-style (or "card-style") interfaces with a conversational, natural language experience.
 
-## 🚀 Features
+Instead of navigating through complex charts or dropdowns, users simply *ask* for what they need—whether it's the current temperature in London, a forecast for the weekend, or specific climate details—and receive an intelligent, formatted response instantly.
 
-*   **Modern UI**: Clean "Very Dark Blue" and white theme with glassmorphism effects.
-*   **Chat Interface**: Real-time interaction with the weather agent using markdown rendering.
-*   **Voice Input** (Bonus): Speech-to-text functionality using the Web Speech API.
-*   **Aesthetic Animations**: Smooth transitions and loading states powered by Framer Motion.
-*   **Responsive**: Mobile-first design working seamlessly on all devices.
-*   **Robust**: Handles API errors and connection issues gracefully.
+## 📸 Screenshots
+![App Interface](image.png)
+*The main chat interface showing a conversation with the AI Agent, featuring the new high-visibility blue user bubbles and typewriter-style agent responses.*
 
-## 🛠️ Technology Stack
+## 🚀 Key Features
 
-*   **Framework**: Next.js 15 (App Router)
-*   **Styling**: Tailwind CSS, Lucide Icons
-*   **Animation**: Framer Motion
-*   **Markdown**: react-markdown, remark-gfm
+### 🧠 Intelligent Conversational Core
+At the heart of WeatherGo is a sophisticated AI agent capable of understanding natural language queries.
+*   **Contextual Understanding**: The agent remembers the flow of conversation. You can ask "What's the weather in Paris?" followed by "What about tomorrow?" without restating the city.
+*   **Rich Text Formatting**: Responses are not just plain text. They are beautifully rendered using Markdown, supporting lists, bold text for emphasis, and organized data structures for readability.
+*   **Error Handling**: The system gracefully handles API failures or misunderstood queries, guiding the user back to a helpful path.
 
-## 📦 Setup Instructions
+### 🎨 Modern & Responsive UI
+The application features a "Glassmorphism" inspired design with a clean, light-themed aesthetic.
+*   **Dynamic Message Bubbles**: User messages stand out in vivid blue for high contrast, while agent responses appear in a clean card style.
+*   **Typewriter Animation**: To mimic a real-time thinking process, agent responses stream in character-by-character.
+*   **Fully Responsive**: Whether accessed on a 4K desktop monitor or a mobile phone, the layout adapts fluidly.
 
-1.  **Clone the repository**:
+### 🛠️ Advanced Functionality
+*   **🎤 Voice Input (Speech-to-Text)**: Don't want to type? Click the microphone icon. using the Web Speech API, WeatherGo converts your spoken words into text instantly.
+*   **🗣️ Text-to-Speech (Agent Voice)**: The agent can "speak" its forecast to you. A speaker icon on every agent message triggers the browser's native synthesis engine.
+*   **📍 Instant Geolocation**: A dedicated "Map Pin" button allows you to instantly ask for the weather at your exact longitude and latitude, perfect for traveling.
+
+## 💻 Technology Stack
+
+This project leverages a modern, robust stack to ensure performance, scalability, and developer experience:
+
+*   **Next.js 15 (App Router)**: The framework of choice for React, providing server-side rendering and efficient routing.
+*   **React 18**: for building a dynamic, component-based user interface.
+*   **Tailwind CSS v4**: For utility-first styling, enabling rapid UI development and easy theming.
+*   **Lucide React**: A beautiful library of consistent, lightweight icons.
+*   **Framer Motion**: Powering the smooth entry animations of message bubbles and loading indicators.
+*   **React Markdown & Remark GFM**: For rendering complex, rich-text AI responses safely.
+
+## 📂 Project Structure
+
+A quick look at how the code is organized:
+
+```
+src/
+├── app/
+│   ├── layout.tsx      # Root layout (fonts, global providers)
+│   ├── page.tsx        # Main entry point (Chat Interface)
+│   └── globals.css     # Global styles & Tailwind variables
+├── components/
+│   ├── ui/
+│   │   ├── ChatInterface.tsx  # The brain of the frontend logic
+│   │   ├── MessageBubble.tsx  # Reusable chat message component
+│   │   └── LoadingIndicator.tsx # Animated loading dots
+├── lib/
+│   ├── api.ts          # API layer for Weather Agent communication
+│   └── utils.ts        # Helper functions (class merging, formatting)
+```
+
+## 🔧 Installation & Setup Guide
+
+Follow these steps to get WeatherGo running on your local machine:
+
+1.  **Clone the Repository**
     ```bash
-    git clone <repository-url>
-    cd weather-app
+    git clone https://github.com/your-username/weathergo.git
+    cd weathergo
     ```
 
-2.  **Install Dependencies**:
+2.  **Install Dependencies**
+    Ensure you have Node.js installed, then run:
     ```bash
     npm install
     ```
 
-3.  **Run Development Server**:
+3.  **Start the Development Server**
     ```bash
     npm run dev
     ```
 
-4.  **Open in Browser**:
-    Navigate to [http://localhost:3000](http://localhost:3000).
-
-## 📝 Implementation Details
-
-### Approach
-- **Component-Based**: Built reusable components like `MessageBubble`, `LoadingIndicator`, and `ChatInterface`.
-- **API Integration**: The `api.ts` utility handles the specific request/response lifecycle, including parsing nested JSON responses from the Mastra Cloud agent.
-- **State Management**: React `useState` and `useRef` handle the chat history, auto-scrolling, and voice input states.
-
-### Deviations & Assumptions
-- **API Endpoint**: As per specific user instruction, used the `test-agent` endpoint instead of the one in the PDF.
-- **Streaming**: Used `stream: false` as requested by the user, receiving the full response at once.
-- **Roll Number**: Injected `2023201002` into the request body as `threadId` to meet the assignment requirement.
-
-## 🌟 Bonus Features
-- **Voice Input**: Click the microphone icon to speak your query. Visual feedback pulses red when listening.
-- **Dynamic Favicon**: The cloud icon matches the brand color uniquely generated via `icon.tsx`.
+4.  **Launch the App**
+    Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
 
 ---
-*Built for Provue AI Frontend Assignment.*
+*Developed by Sarthak for the Pazago Frontend Assignment (Roll No: 2023201002).*

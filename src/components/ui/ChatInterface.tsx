@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, CloudRain, Trash2, Mic, MicOff } from "lucide-react";
+import { Send, CloudRain, Trash2, Mic, MicOff, MapPin, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageBubble } from "./MessageBubble";
 import { LoadingIndicator } from "./LoadingIndicator";
@@ -31,6 +31,15 @@ export function ChatInterface() {
     useEffect(() => {
         scrollToBottom();
     }, [messages, isLoading]);
+
+    // TTS Function
+    const speak = (text: string) => {
+        window.speechSynthesis.cancel(); // Stop undefined previous speech
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        window.speechSynthesis.speak(utterance);
+    };
 
     const startListening = () => {
         if (!("webkitSpeechRecognition" in window)) {
@@ -76,6 +85,29 @@ export function ChatInterface() {
         }
     };
 
+    const handleLocationClick = () => {
+        if ('geolocation' in navigator) {
+            setIsLoading(true);
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const locationQuery = `What is the weather at latitude ${latitude}, longitude ${longitude}?`;
+                    setInputValue(locationQuery);
+                    setIsLoading(false);
+                    // Optional: immediately send or let user send
+                    inputRef.current?.focus();
+                },
+                (error) => {
+                    console.error("Geolocation error:", error);
+                    alert("Could not retrieve your location. Please check browser permissions.");
+                    setIsLoading(false);
+                }
+            );
+        } else {
+            alert("Geolocation is not supported by your browser.");
+        }
+    };
+
     const handleSendMessage = async () => {
         if (!inputValue.trim() || isLoading) return;
 
@@ -90,6 +122,9 @@ export function ChatInterface() {
             const agentTimestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const agentMessage: ChatMessage = { role: "agent", content: responseText, timestamp: agentTimestamp };
             setMessages((prev) => [...prev, agentMessage]);
+
+            // Auto-speak response if desired (optional, maybe too intrusive to do automatically)
+            // speak(responseText); 
         } catch (error) {
             const errorMessage: ChatMessage = {
                 role: "agent",
@@ -117,9 +152,9 @@ export function ChatInterface() {
     };
 
     return (
-        <div className="flex flex-col h-[85vh] max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+        <div className="flex flex-col h-[85vh] max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-slate-800 transition-colors duration-300">
             {/* Header */}
-            <div className="bg-primary p-4 md:p-6 flex items-center justify-between shadow-md z-10">
+            <div className="bg-primary p-4 md:p-6 flex items-center justify-between shadow-md z-10 transition-colors duration-300">
                 <div className="flex items-center space-x-3">
                     <div className="bg-white/10 p-2 rounded-xl backdrop-blur-sm">
                         <CloudRain className="text-blue-300 w-6 h-6 md:w-8 md:h-8" />
@@ -134,24 +169,27 @@ export function ChatInterface() {
                         </div>
                     </div>
                 </div>
-                <button
-                    onClick={clearChat}
-                    className="text-white/70 hover:text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
-                    title="Clear Chat"
-                >
-                    <Trash2 size={20} />
-                </button>
+                <div className="flex items-center space-x-2">
+
+                    <button
+                        onClick={clearChat}
+                        className="text-white/70 hover:text-white hover:bg-white/10 p-2 rounded-lg transition-colors"
+                        title="Clear Chat"
+                    >
+                        <Trash2 size={20} />
+                    </button>
+                </div>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 relative scroll-smooth">
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 relative scroll-smooth transition-colors duration-300">
                 {messages.length === 0 ? (
                     <div className="flex flex-col items-center justify-center h-full text-center p-8 opacity-60">
-                        <div className="bg-blue-50 p-6 rounded-full mb-4">
+                        <div className="bg-blue-50 p-6 rounded-full mb-4 transition-colors">
                             <CloudRain className="w-16 h-16 text-blue-400" />
                         </div>
-                        <h3 className="text-xl font-bold text-primary mb-2">How can I help you today?</h3>
-                        <p className="text-gray-500 max-w-sm">
+                        <h3 className="text-xl font-bold text-primary mb-2 transition-colors">How can I help you today?</h3>
+                        <p className="text-gray-500 max-w-sm transition-colors">
                             Ask me about the weather in any city, forecast details, or climate questions.
                         </p>
                         <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-md">
@@ -186,20 +224,28 @@ export function ChatInterface() {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-white border-t border-gray-100">
+            <div className="p-4 bg-white dark:bg-slate-900 border-t border-gray-100 dark:border-slate-800 transition-colors duration-300">
                 <div className={cn(
-                    "relative flex items-center bg-gray-50 transition-colors rounded-2xl border border-gray-200 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20",
-                    isListening && "border-red-400 ring-2 ring-red-100" // Visual feedback for listening
+                    "relative flex items-center bg-gray-50 dark:bg-slate-800 transition-colors rounded-2xl border border-gray-200 dark:border-slate-700 focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20",
+                    isListening && "border-red-400 ring-2 ring-red-100 dark:ring-red-900/50" // Visual feedback for listening
                 )}>
                     <button
                         onClick={handleMicClick}
                         className={cn(
-                            "p-3 rounded-xl ml-2 transition-all duration-200 hover:bg-gray-200",
-                            isListening ? "text-red-500 animate-pulse bg-red-50 hover:bg-red-100" : "text-gray-400"
+                            "p-3 rounded-xl ml-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-slate-700",
+                            isListening ? "text-red-500 animate-pulse bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/40" : "text-gray-400 dark:text-gray-500"
                         )}
                         title={isListening ? "Stop Listening" : "Voice Input"}
                     >
                         {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                    </button>
+
+                    <button
+                        onClick={handleLocationClick}
+                        className="p-3 rounded-xl transition-all duration-200 hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400"
+                        title="Use Current Location"
+                    >
+                        <MapPin size={20} />
                     </button>
 
                     <input
@@ -209,7 +255,7 @@ export function ChatInterface() {
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={handleKeyDown}
                         placeholder={isListening ? "Listening..." : "Ask about the weather..."}
-                        className="flex-1 bg-transparent px-4 py-4 text-gray-800 placeholder-gray-400 focus:outline-none"
+                        className="flex-1 bg-transparent px-4 py-4 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none"
                         disabled={isLoading}
                     />
                     <button
@@ -219,13 +265,13 @@ export function ChatInterface() {
                             "p-3 rounded-xl mr-2 transition-all duration-200",
                             inputValue.trim() && !isLoading
                                 ? "bg-accent text-white shadow-lg hover:bg-blue-600 transform hover:scale-105"
-                                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                : "bg-gray-200 dark:bg-slate-700 text-gray-400 cursor-not-allowed"
                         )}
                     >
                         <Send size={20} />
                     </button>
                 </div>
-                <p className="text-center text-[10px] text-gray-400 mt-2">
+                <p className="text-center text-[10px] text-gray-400 mt-2 transition-colors">
                     Powered by Provue AI • Roll No: 2023201002
                 </p>
             </div>
