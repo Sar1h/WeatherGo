@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WeatherGo - Weather Agent Chat Interface
 
-## Getting Started
+A modern, responsive, and aesthetic chat interface for the Provue AI Weather Agent, built with Next.js 15 and Tailwind CSS.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+*   **Modern UI**: Clean "Very Dark Blue" and white theme with glassmorphism effects.
+*   **Chat Interface**: Real-time interaction with the weather agent using markdown rendering.
+*   **Voice Input** (Bonus): Speech-to-text functionality using the Web Speech API.
+*   **Aesthetic Animations**: Smooth transitions and loading states powered by Framer Motion.
+*   **Responsive**: Mobile-first design working seamlessly on all devices.
+*   **Robust**: Handles API errors and connection issues gracefully.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+*   **Framework**: Next.js 15 (App Router)
+*   **Styling**: Tailwind CSS, Lucide Icons
+*   **Animation**: Framer Motion
+*   **Markdown**: react-markdown, remark-gfm
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Setup Instructions
 
-## Learn More
+1.  **Clone the repository**:
+    ```bash
+    git clone <repository-url>
+    cd weather-app
+    ```
 
-To learn more about Next.js, take a look at the following resources:
+2.  **Install Dependencies**:
+    ```bash
+    npm install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3.  **Run Development Server**:
+    ```bash
+    npm run dev
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4.  **Open in Browser**:
+    Navigate to [http://localhost:3000](http://localhost:3000).
 
-## Deploy on Vercel
+## 📝 Implementation Details
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Approach
+- **Component-Based**: Built reusable components like `MessageBubble`, `LoadingIndicator`, and `ChatInterface`.
+- **API Integration**: The `api.ts` utility handles the specific request/response lifecycle, including parsing nested JSON responses from the Mastra Cloud agent.
+- **State Management**: React `useState` and `useRef` handle the chat history, auto-scrolling, and voice input states.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Deviations & Assumptions
+- **API Endpoint**: As per specific user instruction, used the `test-agent` endpoint instead of the one in the PDF.
+- **Streaming**: Used `stream: false` as requested by the user, receiving the full response at once.
+- **Roll Number**: Injected `2023201002` into the request body as `threadId` to meet the assignment requirement.
+
+## 🌟 Bonus Features
+- **Voice Input**: Click the microphone icon to speak your query. Visual feedback pulses red when listening.
+- **Dynamic Favicon**: The cloud icon matches the brand color uniquely generated via `icon.tsx`.
+
+---
+*Built for Provue AI Frontend Assignment.*
