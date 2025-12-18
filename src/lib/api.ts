@@ -5,7 +5,7 @@ export interface ChatMessage {
 }
 
 export async function sendMessageToAgent(message: string): Promise<string> {
-    const API_URL = "https://api-dev.provue.ai/api/webapp/agent/test-agent";
+    const API_URL = "/api/chat";
     const ROLL_NUMBER = "2023201002";
 
     try {
